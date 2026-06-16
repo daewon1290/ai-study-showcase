@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 모임 결과물 모음</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Pretendard', sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+      padding: 60px 24px 48px;
+    }
+
+    header h1 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    header p {
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+      opacity: 0.88;
+      font-weight: 400;
+    }
+
+    /* ── Grid ── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px 24px 24px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(102, 126, 234, 0.18);
+    }
+
+    .card-author {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .author-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      line-height: 1.4;
+    }
+
+    .card-desc {
+      font-size: 0.92rem;
+      color: #777;
+      flex-grow: 1;
+      line-height: 1.55;
+    }
+
+    .card-btn {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 10px 22px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      transition: opacity 0.2s ease;
+    }
+
+    .card-btn:hover {
+      opacity: 0.88;
+    }
+
+    .card-btn.disabled {
+      background: #d1d5db;
+      color: #9ca3af;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.82rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>AI 모임 결과물 모음</h1>
+  <p>각자 Claude Code로 만든 결과물입니다.</p>
+</header>
+
+<main>
+  <div class="grid" id="card-grid">
+    <!-- 카드는 아래 JavaScript 배열에서 자동 생성됩니다 -->
+  </div>
+</main>
+
+<footer>
+  Made with Claude Code ✦ AI 모임
+</footer>
+
+<script>
+  /*
+   * ────────────────────────────────────────────
+   *  참가자 데이터를 여기에 추가하세요.
+   *  필드:
+   *    name  : 이름
+   *    title : 결과물 제목
+   *    desc  : 한 줄 설명
+   *    link  : URL (미정이면 "#" 으로 두면 비활성 처리됩니다)
+   * ────────────────────────────────────────────
+   */
+  const members = [
+    {
+      name: "대원",
+      title: "나는 어떤 사람에게 끌릴까?",
+      desc: "내가 끌리는 사람의 분위기와 성향을 알아보는 테스트",
+      link: "https://daewon1290.github.io/attraction-test/",
+    },
+    {
+      name: "종철",
+      title: "나는 썸에서 어떤 유형일까?",
+      desc: "썸 상황에서 나의 반응 스타일을 알아보는 테스트",
+      link: "https://park-jongchul.github.io/attraction-quiz/",
+    },
+    {
+      name: "디오",
+      title: "나는 무슨 디저트일까?",
+      desc: "디저트 같은 성격 유형",
+      link: "https://oh102102-a11y.github.io/dessert-test/",
+    },
+    // ← 여기에 새 참가자 추가 (쉼표 뒤에 중괄호 블록)
+  ];
+
+  /* 카드 자동 생성 */
+  const grid = document.getElementById("card-grid");
+
+  members.forEach(({ name, title, desc, link }) => {
+    const isPending = !link || link === "#";
+    const initial = name.charAt(0);
+
+    const card = document.createElement("article");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="card-author">
+        <div class="avatar">${initial}</div>
+        <span class="author-name">${name}</span>
+      </div>
+      <div class="card-title">${title}</div>
+      <div class="card-desc">${desc}</div>
+      <a
+        href="${isPending ? "#" : link}"
+        ${isPending ? "" : 'target="_blank" rel="noopener noreferrer"'}
+        class="card-btn${isPending ? " disabled" : ""}"
+      >
+        ${isPending ? "준비중" : "바로가기 →"}
+      </a>
+    `;
+    grid.appendChild(card);
+  });
+</script>
+
+</body>
+</html>
